@@ -1,46 +1,24 @@
 import * as http from 'http'
-
-export type HttpRequest = http.IncomingMessage
-export type HttpResponse = http.ServerResponse<HttpRequest>
-export type RouteMapping = {
-  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
-  url: string
-  handler: (req: HttpRequest, res: HttpResponse) => void
-}
-
-const getHome = (req: HttpRequest, res: HttpResponse) => {
-  res.writeHead(200, { 'content-type': 'text/plain' })
-  res.end('This is home')
-}
-
-const getAbout = (req: HttpRequest, res: HttpResponse) => {
-  res.writeHead(200, { 'content-type': 'text/plain' })
-  res.end('This is about us')
-}
-
-const getContact = (req: HttpRequest, res: HttpResponse) => {
-  res.writeHead(200, { 'content-type': 'text/plain' })
-  res.end('This is our contact')
-}
-
-/* Http Method와 Url, Handler를 매핑한다. */
-const routes: RouteMapping[] = [
-  { method: 'GET', url: '/', handler: getHome },
-  { method: 'GET', url: '/about', handler: getAbout },
-  { method: 'GET', url: '/contact', handler: getContact },
-]
+import { HttpMethod } from './controller/types'
+import { route } from './routes.module'
 
 const server = http.createServer((req, res) => {
   const { url, method } = req
 
-  const route = routes.find((route) => route.url === url && route.method === method)
+  if (!url || !method) {
+    res.statusCode = 400
+    res.end('Bad Request')
+    return
+  }
 
-  if (route) {
-    /* route가 존재한다면 handler를 호출한다 */
-    route.handler(req, res)
+  const handlers = route[method as HttpMethod]
+  const handler = handlers && url in handlers ? handlers[url] : undefined
+
+  if (handler) {
+    handler(req, res)
   } else {
-    res.writeHead(404, { 'content-type': 'text/plain' })
-    res.end('Page not found')
+    res.statusCode = 404
+    res.end('Not Found')
   }
 })
 
