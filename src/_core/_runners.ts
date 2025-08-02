@@ -1,5 +1,4 @@
 import { route } from '../controller/routes'
-import { HttpMethod, HttpRequest, HttpResponse } from '../controller/types'
 
 export function runRouteHandlers(req: HttpRequest, res: HttpResponse) {
   const { url, method } = req

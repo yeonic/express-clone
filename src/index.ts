@@ -1,5 +1,5 @@
 import * as http from 'http'
-import { runRouteHandlers } from './core/runners'
+import { runRouteHandlers } from './_core/_runners'
 
 const server = http.createServer((req, res) => {
   runRouteHandlers(req, res)

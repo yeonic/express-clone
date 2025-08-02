@@ -1,7 +1,3 @@
-import { HttpRequest, HttpResponse } from './types'
-
-export type RouteHandler = (req: HttpRequest, res: HttpResponse) => any
-
 export const getHome = (req: HttpRequest, res: HttpResponse) => {
   res.writeHead(200, { 'content-type': 'text/plain' })
   res.end('This is home')

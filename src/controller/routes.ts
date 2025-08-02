@@ -1,5 +1,5 @@
+import { Route } from './controller.types'
 import { getAbout, getContact, getHome } from './controllers'
-import { Route } from './types'
 
 export const route: Route = {
   GET: {
