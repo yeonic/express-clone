@@ -6,4 +6,11 @@ declare global {
   type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 }
 
+declare module 'http' {
+  interface IncomingMessage {
+    processList?: string[]
+    user?: { id: number; name: string }
+  }
+}
+
 export {}
