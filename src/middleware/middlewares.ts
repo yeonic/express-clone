@@ -1,26 +1,27 @@
-import { MiddleWare } from '../core/middleware.types'
+import { ErrorMiddleWare, MiddleWare } from '../core/middleware.types'
 
 export const middlewares: MiddleWare[] = [
   (req: HttpRequest, res: HttpResponse, next: () => void) => {
     console.log('📮 요청 수신')
-    req.processList = ['📮 요청 수신']
+    if (req.url === '/forbidden') {
+      res.writeHead(403, { 'content-type': 'text/plain' })
+      return res.end('Access Denied: You cannot access this resource.')
+    }
     next()
   },
   (req: HttpRequest, res: HttpResponse, next: () => void) => {
-    console.log('🔑 요청 검증')
-    req.user = { id: 123, name: 'user1' }
-    req.processList?.push('🔑 요청 검증')
-    next()
+    console.log('⚠️ 의도적인 에러 발생')
+    throw new Error('Something went wrong in Middleware 2!')
   },
   (req: HttpRequest, res: HttpResponse, next: () => void) => {
     console.log('📦 응답 준비')
-    const resData = {
-      message: 'Hello from Enhanced Middleware Chain!',
-      user: req.user,
-      log: req.processList,
-    }
-    res.writeHead(200, { 'content-type': 'application/json' })
-    res.end(JSON.stringify(resData))
-    next()
+    res.writeHead(200, { 'content-type': 'text/plain' })
+    res.end('Hello, everything is fine')
   },
 ] as const
+
+export const errorMiddleWare: ErrorMiddleWare = (err, req, res, next) => {
+  console.error('[Error MiddleWare] 에러 발생 : ', err.message)
+  res.writeHead(500, 'text/plain')
+  res.end(`Internal Server Error: ${err.message}`)
+}

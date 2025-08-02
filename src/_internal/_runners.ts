@@ -1,5 +1,5 @@
 import { route } from '../controller/routes'
-import { MiddleWare } from '../core/middleware.types'
+import { ErrorMiddleWare, MiddleWare } from '../core/middleware.types'
 
 export function runRouteHandlers(req: HttpRequest, res: HttpResponse) {
   const { url, method } = req
@@ -24,17 +24,26 @@ export function runRouteHandlers(req: HttpRequest, res: HttpResponse) {
 export function runMiddlewares(
   req: HttpRequest,
   res: HttpResponse,
-  middlewares: MiddleWare[]
+  middlewares: MiddleWare[],
+  errorMiddleWare: ErrorMiddleWare
 ): void {
   let idx = 0
 
-  function next() {
+  function next(err?: Error) {
+    if (err) {
+      return errorMiddleWare(err, req, res, next)
+    }
+
     if (idx >= middlewares.length) {
       console.log('Middleware 처리 완료')
       return
     }
     const currentMiddleware = middlewares[idx++]
-    currentMiddleware(req, res, next)
+    try {
+      currentMiddleware(req, res, next)
+    } catch (error) {
+      next(error as unknown as Error)
+    }
   }
 
   next()
