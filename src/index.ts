@@ -1,7 +1,9 @@
 import * as http from 'http'
-import { runRouteHandlers } from './_core/_runners'
+import { runMiddlewares, runRouteHandlers } from './_internal/_runners'
+import { middlewares } from './middleware/middlewares'
 
 const server = http.createServer((req, res) => {
+  runMiddlewares(req, res, middlewares)
   runRouteHandlers(req, res)
 })
 

@@ -1,4 +1,5 @@
 import { route } from '../controller/routes'
+import { MiddleWare } from '../core/middleware.types'
 
 export function runRouteHandlers(req: HttpRequest, res: HttpResponse) {
   const { url, method } = req
@@ -18,4 +19,23 @@ export function runRouteHandlers(req: HttpRequest, res: HttpResponse) {
     res.statusCode = 404
     res.end('Not Found')
   }
+}
+
+export function runMiddlewares(
+  req: HttpRequest,
+  res: HttpResponse,
+  middlewares: MiddleWare[]
+): void {
+  let idx = 0
+
+  function next() {
+    if (idx >= middlewares.length) {
+      console.log('Middleware 처리 완료')
+      return
+    }
+    const currentMiddleware = middlewares[idx++]
+    currentMiddleware(req, res, next)
+  }
+
+  next()
 }

@@ -1,4 +1,4 @@
-import { Route } from './controller.types'
+import { Route } from '../core/controller.types'
 import { getAbout, getContact, getHome } from './controllers'
 
 export const route: Route = {
