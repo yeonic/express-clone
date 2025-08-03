@@ -1,6 +1,7 @@
 import * as http from 'http'
 import { runMiddlewares } from './_internal/_runners'
-import { errorMiddleWare, middlewares } from './middleware/middlewares'
+import { middlewares } from './middleware'
+import { errorMiddleWare } from './middleware/errorMiddleware'
 
 const server = http.createServer((req, res) => {
   runMiddlewares(req, res, middlewares, errorMiddleWare)
