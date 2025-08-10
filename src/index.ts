@@ -1,11 +1,13 @@
 import * as http from 'http'
-import { runMiddlewares } from './_internal/_runners'
+import { runMiddlewares, runRouteHandlers } from './_internal/_runners'
+import { initRoutes } from './controller/controllers'
 import { middlewares } from './middleware'
 import { errorMiddleWare } from './middleware/errorMiddleware'
 
 const server = http.createServer((req, res) => {
+  initRoutes()
   runMiddlewares(req, res, middlewares, errorMiddleWare)
-  // runRouteHandlers(req, res)
+  runRouteHandlers(req, res)
 })
 
 const port = 3000

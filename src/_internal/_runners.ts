@@ -1,5 +1,5 @@
-import { route } from '../controller/routes'
 import { ErrorMiddleWare, MiddleWare } from '../core/middleware.types'
+import { matchRoute } from './_routes'
 
 export function runRouteHandlers(req: HttpRequest, res: HttpResponse) {
   const { url, method } = req
@@ -10,15 +10,17 @@ export function runRouteHandlers(req: HttpRequest, res: HttpResponse) {
     return
   }
 
-  const handlers = route[method as HttpMethod]
-  const handler = handlers && url in handlers ? handlers[url] : undefined
+  console.log('inside runRouteHandlers: ', method, url)
 
-  if (handler) {
-    handler(req, res)
-  } else {
+  const matched = matchRoute(method as HttpMethod, url)
+
+  if (!matched) {
     res.statusCode = 404
     res.end('Not Found')
+    return
   }
+
+  matched.handler(req, res, matched.params)
 }
 
 export function runMiddlewares(

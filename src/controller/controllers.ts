@@ -1,14 +1,45 @@
-export const getHome = (req: HttpRequest, res: HttpResponse) => {
-  res.writeHead(200, { 'content-type': 'text/plain' })
-  res.end('This is home')
-}
+import { addRoute } from '../_internal/_routes'
+import { IRoute } from '../_internal/interfaces/IRoute'
 
-export const getAbout = (req: HttpRequest, res: HttpResponse) => {
-  res.writeHead(200, { 'content-type': 'text/plain' })
-  res.end('This is about us')
-}
+export function initRoutes() {
+  addRoute(
+    'GET',
+    '/',
+    (req: HttpRequest, res: HttpResponse, params?: IRoute.PathParams) => {
+      res.writeHead(200, { 'content-type': 'text/plain' })
+      res.end('This is home')
+    }
+  )
 
-export const getContact = (req: HttpRequest, res: HttpResponse) => {
-  res.writeHead(200, { 'content-type': 'text/plain' })
-  res.end('This is our contact')
+  addRoute(
+    'GET',
+    '/:id',
+    (req: HttpRequest, res: HttpResponse, params?: IRoute.PathParams) => {
+      res.writeHead(200, { 'content-type': 'text/plain' })
+      const value = 'This is home' + (!!params ? ` with ${params!['id']}` : '')
+      res.end(value)
+    }
+  )
+
+  addRoute(
+    'GET',
+    '/about/:id',
+    (req: HttpRequest, res: HttpResponse, params?: IRoute.PathParams) => {
+      res.writeHead(200, { 'content-type': 'text/plain' })
+      const value =
+        'This is about us' + (!!params ? ` with ${params!['id']}` : '')
+      res.end(value)
+    }
+  )
+
+  addRoute(
+    'GET',
+    '/contact/:id',
+    (req: HttpRequest, res: HttpResponse, params?: IRoute.PathParams) => {
+      res.writeHead(200, { 'content-type': 'text/plain' })
+      const value =
+        'This is our contact' + (!!params ? ` with ${params!['id']}` : '')
+      res.end(value)
+    }
+  )
 }

@@ -11,7 +11,6 @@ export const middlewares: MiddleWare[] = [
   staticFileMiddleware,
   (req: HttpRequest, res: HttpResponse, next: () => void) => {
     console.log('📦 응답 준비')
-    res.writeHead(200, { 'content-type': 'text/plain' })
-    res.end('Hello, everything is fine')
+    next()
   },
 ] as const

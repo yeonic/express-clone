@@ -1,6 +1,9 @@
+import { IRoute } from '../_internal/interfaces/IRoute'
+
 export type RouteHandler = (
   req: HttpRequest,
-  res: HttpResponse
+  res: HttpResponse,
+  params?: IRoute.PathParams
 ) => void | Promise<void>
 
 export type Route = {
