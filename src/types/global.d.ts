@@ -7,9 +7,11 @@ declare global {
 }
 
 declare module 'http' {
+  type BodyType = string | { [propertyName: string]: string }
   interface IncomingMessage {
     processList?: string[]
     user?: { id: number; name: string }
+    body?: { [propertyName: string]: BodyType }
   }
 }
 

@@ -1,6 +1,7 @@
 import * as path from 'path'
 
 import { MiddleWare } from '../core/middleware.types'
+import { jsonParser } from './jsonParser'
 import { createStaticMiddleware } from './staticMiddleware'
 
 const staticFileMiddleware = createStaticMiddleware(
@@ -9,6 +10,7 @@ const staticFileMiddleware = createStaticMiddleware(
 
 export const middlewares: MiddleWare[] = [
   staticFileMiddleware,
+  jsonParser(),
   (req: HttpRequest, res: HttpResponse, next: () => void) => {
     console.log('📦 응답 준비')
     next()

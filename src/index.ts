@@ -6,8 +6,9 @@ import { errorMiddleWare } from './middleware/errorMiddleware'
 
 const server = http.createServer((req, res) => {
   initRoutes()
-  runMiddlewares(req, res, middlewares, errorMiddleWare)
-  runRouteHandlers(req, res)
+  runMiddlewares(req, res, middlewares, errorMiddleWare, () => {
+    runRouteHandlers(req, res) // 미들웨어 완료 후 라우트 핸들러 실행
+  })
 })
 
 const port = 3000

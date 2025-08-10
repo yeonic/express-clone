@@ -42,4 +42,15 @@ export function initRoutes() {
       res.end(value)
     }
   )
+
+  addRoute(
+    'POST',
+    '/test',
+    (req: HttpRequest, res: HttpResponse, params?: IRoute.PathParams) => {
+      res.writeHead(200, { 'content-type': 'application/json' })
+      res.end(
+        JSON.stringify({ message: 'request fully processed!', data: req.body })
+      )
+    }
+  )
 }

@@ -10,8 +10,6 @@ export function runRouteHandlers(req: HttpRequest, res: HttpResponse) {
     return
   }
 
-  console.log('inside runRouteHandlers: ', method, url)
-
   const matched = matchRoute(method as HttpMethod, url)
 
   if (!matched) {
@@ -27,7 +25,8 @@ export function runMiddlewares(
   req: HttpRequest,
   res: HttpResponse,
   middlewares: MiddleWare[],
-  errorMiddleWare: ErrorMiddleWare
+  errorMiddleWare: ErrorMiddleWare,
+  onComplete: () => void // 콜백 추가
 ): void {
   let idx = 0
 
@@ -38,6 +37,7 @@ export function runMiddlewares(
 
     if (idx >= middlewares.length) {
       console.log('Middleware 처리 완료')
+      onComplete() // 미들웨어 완료 후 콜백 실행
       return
     }
     const currentMiddleware = middlewares[idx++]
